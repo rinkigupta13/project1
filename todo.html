@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sorted To-Do List with Priority</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            text-align: center;
+            margin: 20px;
+        }
+        #todo-container {
+            width: 300px;
+            margin: 20px auto;
+        }
+        #task-list {
+            list-style: none;
+            padding: 0;
+        }
+        .task {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px;
+            margin: 5px 0;
+            border: 1px solid #ccc;
+            background-color: #fff;
+        }
+        .task.completed {
+            background-color: #e0e0e0;
+        }
+        .delete-btn {
+            background-color: #ff4d4d;
+            color: #fff;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div id="todo-container">
+        <h2>Sorted To-Do List with Priority</h2>
+        <input type="text" id="task-input" placeholder="Add a new task">
+        <select id="priority-dropdown">
+            <option value="low">Low</option>
+            <option value="medium">Medium</option>
+            <option value="high">High</option>
+        </select>
+        <button onclick="addTask()">Add Task</button>
+        <ul id="task-list"></ul>
+    </div>
+
+    <script>
+
+        let s1 = Symbol("Hi this is description");
+        alert
+        function addTask() {
+            var taskInput = document.getElementById('task-input');
+            var priorityDropdown = document.getElementById('priority-dropdown');
+            var taskList = document.getElementById('task-list');
+
+            if (taskInput.value.trim() !== "") {
+                var taskText = taskInput.value;
+                var taskPriority = priorityDropdown.value;
+
+                var newTask = document.createElement('li');
+                newTask.className = 'task';
+                newTask.setAttribute('data-priority', taskPriority);
+                newTask.innerHTML = `
+                    <span>${taskText}</span>
+                    <span>Priority: ${taskPriority}</span>
+                    <button onclick="completeTask(this)">Complete</button>
+                    <button class="delete-btn" onclick="deleteTask(this)">Delete</button>
+                `;
+
+                // Insert the new task in the correct order based on priority
+                var tasks = Array.from(taskList.children);
+                var index = tasks.findIndex(task => task.getAttribute('data-priority') > taskPriority);
+                if (index === -1) {
+                    taskList.appendChild(newTask);
+                } else {
+                    taskList.insertBefore(newTask, tasks[index]);
+                }
+
+                taskInput.value = '';
+            }
+        }
+
+        function completeTask(button) {
+            var task = button.parentNode;
+            task.classList.toggle('completed');
+        }
+
+        function deleteTask(button) {
+            var task = button.parentNode;
+            task.parentNode.removeChild(task);
+        }
+    </script>
+</body>
+</html>
